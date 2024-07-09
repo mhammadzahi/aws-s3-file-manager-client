@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Dictaphone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f8f8;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        button {
+            background-color: #008080;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button:disabled {
+            background-color: #66b2b2;
+            cursor: not-allowed;
+        }
+
+        h1 {
+            color: #008080;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Web Dictaphone</h1>
+        <button id="recordButton">Start Recording</button>
+        <button id="stopButton" disabled>Stop Recording</button>
+        <a id="downloadButton" class="button" style="display: none;">Download Recording</a>
+        <audio id="audioPlayback" controls></audio>
+    </div>
+    <script>
+        let audioContext;
+        let recorder;
+        let audioChunks = [];
+
+        document.getElementById('recordButton').addEventListener('click', startRecording);
+        document.getElementById('stopButton').addEventListener('click', stopRecording);
+
+        function startRecording() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const input = audioContext.createMediaStreamSource(stream);
+                    recorder = new MediaRecorder(stream);
+                    
+                    recorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    recorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const audio = document.getElementById('audioPlayback');
+                        audio.src = audioUrl;
+                        
+                        const downloadButton = document.getElementById('downloadButton');
+                        downloadButton.href = audioUrl;
+                        downloadButton.download = 'recording.wav';
+                        downloadButton.style.display = 'inline-block';
+                        audioChunks = [];
+
+                        convertAudioBlobToBase64(audioBlob);
+                    };
+                    
+                    recorder.start();
+                    document.getElementById('recordButton').disabled = true;
+                    document.getElementById('stopButton').disabled = false;
+                })
+                .catch(error => console.error('Error accessing audio devices:', error));
+        }
+
+        function stopRecording() {
+            recorder.stop();
+            document.getElementById('recordButton').disabled = false;
+            document.getElementById('stopButton').disabled = true;
+        }
+
+        function convertAudioBlobToBase64(blob){
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result.split(',')[1];
+                console.log(base64String);
+            };
+            reader.readAsDataURL(blob);
+        }
+    </script>
+</body>
+</html>
