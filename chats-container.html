@@ -1,0 +1,25 @@
+<div id="allConvsContainer" class="container">
+    <? for(var i = 0; i < data[0].length; i++){ ?>
+      <div onclick="openConvModal(<?= data[0][i].corrId ?>, <?= data[0][i].corrName ?>)">
+      <? if(data[0][i].isSeen === 'no'){ ?>
+        <div style="background-color:#f0f0f0" class="conversation">
+          <img class="avatar" src="<?= data[0][i].corrAvatar ?>" alt="Avatar">
+          <div class="message">
+            <div style="font-weight: bold" class="name"><?= data[0][i].corrName ?></div>
+            <div style="" class="preview"><?= data[0][i].lastMessage ?></div>
+          </div>
+            <div class="time"><?= data[0][i].timeLastMsg ?></div>
+        </div>
+      <? } else{ ?>
+          <div class="conversation">
+            <img class="avatar" src="<?= data[0][i].corrAvatar ?>" alt="Avatar">
+            <div class="message">
+              <div class="name"><?= data[0][i].corrName ?></div>
+              <div class="preview"><?= data[0][i].lastMessage ?></div>
+            </div>
+            <div class="time"><?= data[0][i].timeLastMsg ?></div>
+          </div>
+      <? } ?>
+      </div>
+    <? } ?>
+    </div>

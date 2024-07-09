@@ -148,8 +148,8 @@ async function postProtectedData(uploadDataUrl, token, postData){
 }
 
 async function main(){
-    await login('miramar2011', '29011IKsLsD@TfE');
+    await login('test_user', 'password@123');
     var base64str = await convertToBase64();
-    await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', 'folder', 'bucket', 'pdf', true);
+    //await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', 'folder', 'bucket', 'pdf', true);
 }
 main();
