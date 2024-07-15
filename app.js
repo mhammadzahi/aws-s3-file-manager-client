@@ -44,12 +44,10 @@ async function login(userName, passWord){
         }
         else{
             console.log('Authentication failed:', response.status);
-            return null;
         }
     }
     catch(error){
         console.log('Error during authentication:', error);
-        return null;
     }
 }
 
@@ -58,7 +56,6 @@ async function uploadFile(base64str, unitNumber, snNumber, location, mainOrAny, 
     const token = tokenG;
 
     if(token){
-
         const postData = {
             base64str: base64str,
             unit_number: unitNumber,
@@ -74,6 +71,7 @@ async function uploadFile(base64str, unitNumber, snNumber, location, mainOrAny, 
         postProtectedData(uploadFileUrl, token, postData);
     }
 }
+
 
 async function getSignedUrl(objectKey){
     const token = tokenG;
@@ -99,7 +97,6 @@ async function deleteFile(fileUrl){
 }
 
 
-
 async function MoveFile(fileUrl, destinationBucket){
     const token = tokenG;
     if(token){
@@ -121,8 +118,6 @@ async function createFolder(bucketName, folderName){
         postProtectedData(createFolderUrl, token, postData);
     }
 }
-
-
 
 async function postProtectedData(uploadDataUrl, token, postData){
     try{
@@ -150,6 +145,6 @@ async function postProtectedData(uploadDataUrl, token, postData){
 async function main(){
     await login('test_user', 'password@123');
     var base64str = await convertToBase64();
-    //await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', 'folder', 'bucket', 'pdf', true);
+    await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', 'folder', 'bucket', 'pdf', true);
 }
 main();
