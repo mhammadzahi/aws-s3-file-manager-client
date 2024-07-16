@@ -62,7 +62,7 @@ async function uploadFile(base64str, unitNumber, snNumber, location, mainOrAny, 
             sn_number: snNumber,
             location: location,
             main_or_any: mainOrAny,
-            folder_name: folderName,
+            folder_name: folderName,// folder name can be ''
             bucket_name: bucketName,
             file_type: fileType, //'pdf'/'image'/'audio'
             is_private: isPrivate //true/false
@@ -119,8 +119,9 @@ async function createFolder(bucketName, folderName){
     }
 }
 
+
 async function postProtectedData(uploadDataUrl, token, postData){
-    try{
+    try {
         const response = await fetch(uploadDataUrl, {
             method: 'POST',
             headers: {
@@ -129,22 +130,25 @@ async function postProtectedData(uploadDataUrl, token, postData){
             },
             body: JSON.stringify(postData),
         });
-        if(response.ok){
+
+        if (response.ok) {
             const result = await response.json();
             console.log(result.res);
         }
-        else{
-            console.log(result.error);
+        else {
+            const errorResult = await response.json(); // Parse the response body
+            console.log(errorResult.error); // Log the error message
         }
-    }
-    catch(error){
+    } catch (error) {
         console.log(error);
     }
 }
 
+
 async function main(){
-    await login('test_user', 'password@123');
-    var base64str = await convertToBase64();
-    await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', 'folder', 'bucket', 'pdf', true);
+    await login('maintenance_user', 'amws2dspk901@f@E');
+    //var base64str = await convertToBase64();
+    //await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', 'folder', 'bucket', 'pdf', true);
+    deleteFile("https://miramar-real-estate.s3.ap-south-1.amazonaws.com/3002098/526537789_742349921_Al-Reem-Island-Bridges-Tower3_SiliconeApplyingallBathroom-U8dFSL.jpeg");
 }
 main();
