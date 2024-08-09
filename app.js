@@ -141,7 +141,7 @@ async function postProtectedData(uploadDataUrl, token, postData){
 
 
 async function main(){
-    await login('chatapp_user', 'Ie@wU$j9il');
+    await login('abc_user', 'Ie@swfw9rwojil');
     var base64str = await convertToBase64();
     await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', '3', 'miramar-real-estate', 'image', false);
     //var x = await getSisdgnedUrl('https://miramar-chat-app-priddvate.s3.ap-soutjjh-1.afmazonaws.com/20240725-122801-819350515.wav');
