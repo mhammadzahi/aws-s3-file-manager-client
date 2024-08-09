@@ -1,9 +1,3 @@
-//loginAndPostData()
-//loginAndDelete()
-//loginAndMove()
-//loginAndCreateFolder()
-
-
 //domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com'
 domain = 'http://127.0.0.1:5000';
 var tokenG = null;
@@ -18,7 +12,7 @@ const getSignedUrlUrl = domain + '/get-signed-url';
 
 const fs = require('fs');
 async function convertToBase64(){
-    const buffer = fs.readFileSync('test1.pdf');
+    const buffer = fs.readFileSync('5907.jpg');
     const base64String_ = buffer.toString('base64');
     return base64String_;
 }
@@ -40,7 +34,7 @@ async function login(userName, passWord){
         if(response.ok){
             const data = await response.json();
             tokenG = data.res;
-            console.log(tokenG);
+            //console.log(tokenG);
         }
         else{
             console.log('Authentication failed:', response.status);
@@ -131,24 +125,29 @@ async function postProtectedData(uploadDataUrl, token, postData){
             body: JSON.stringify(postData),
         });
 
-        if (response.ok) {
+        if(response.ok){
             const result = await response.json();
             console.log(result.res);
         }
-        else {
+        else{
             const errorResult = await response.json(); // Parse the response body
             console.log(errorResult.error); // Log the error message
         }
-    } catch (error) {
+    }
+    catch(error){
         console.log(error);
     }
 }
 
 
 async function main(){
-    await login('maintenance_user', 'amws2dspk901@f@E');
-    //var base64str = await convertToBase64();
-    //await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', 'folder', 'bucket', 'pdf', true);
-    deleteFile("https://miramar-real-estate.s3.ap-south-1.amazonaws.com/3002098/526537789_742349921_Al-Reem-Island-Bridges-Tower3_SiliconeApplyingallBathroom-U8dFSL.jpeg");
+    await login('chatapp_user', 'Ie@wU$j9il');
+    var base64str = await convertToBase64();
+    await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', '3', 'miramar-real-estate', 'image', false);
+    //var x = await getSisdgnedUrl('https://miramar-chat-app-priddvate.s3.ap-soutjjh-1.afmazonaws.com/20240725-122801-819350515.wav');
+    //console.log(x);
 }
+
 main();
+
+
