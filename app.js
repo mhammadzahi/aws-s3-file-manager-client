@@ -1,5 +1,6 @@
-//domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com'
+//domain = 'https://www.jungleclock.com'
 domain = 'http://127.0.0.1:5000';
+
 var tokenG = null;
 
 const loginUrl = domain + '/login';
@@ -141,13 +142,12 @@ async function postProtectedData(uploadDataUrl, token, postData){
 
 
 async function main(){
-    await login('abc_user', 'Ie@swfw9rwojil');
+    await login('accounting_user', 'qd5wlsm@aqno13v6o');
     var base64str = await convertToBase64();
-    await uploadFile(base64str, 101, 1511156, 'reem', 'main-any', '3', 'miramar-real-estate', 'image', false);
-    //var x = await getSisdgnedUrl('https://miramar-chat-app-priddvate.s3.ap-soutjjh-1.afmazonaws.com/20240725-122801-819350515.wav');
-    //console.log(x);
+
+    //await uploadFile(base64str, 101, 151116, 'reem_island', 'main-or-any-7', 'folder-1302', 'zahi-mohamed', 'image', true);
+    await getSignedUrl('https://zahi-mohamed.s3.ap-south-1.amazonaws.com/folder-1302/735118458_403101098_reem_island_main-or-any-7.jpeg');
 }
 
 main();
-
 
