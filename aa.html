@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload PDF Programmatically</title>
+</head>
+<body>
+    <h1> Upload PDF</h1>
+
+    <script>
+        async function uploadPdf(){
+            const pdfFilePath = 'ai.pdf';
+
+            const tokenG = 'eyJhGYYiAEq0a12t-_jMwSiY';
+
+            try {
+                const response = await fetch(pdfFilePath);
+
+                if(!response.ok) {
+                    throw new Error('Failed to fetch the PDF file');
+                }
+
+                const pdfBlob = await response.blob();
+
+                // Now send this PDF blob to the backend
+                const uploadResponse = await fetch('http://127.0.0.1:5000/dont-allow-copy-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${tokenG}`,
+                        'Content-Type': 'application/pdf'
+                    },
+                    body: pdfBlob
+                });
+
+                if(uploadResponse.ok){
+                    const resultBlob = await uploadResponse.blob();
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(resultBlob);
+                    link.download = 'processed.pdf';
+                    link.click();
+                    console.log('Processed PDF downloaded as processed.pdf');
+                }
+                else{
+                    console.error('Error uploading PDF:', uploadResponse.statusText);
+                }
+            }
+            catch(error){
+                console.error('Error:', error);
+            }
+        }// end
+
+        // Call the function to upload the PDF file when the page loads
+        window.onload = function() {
+            uploadPdf();
+        };
+    </script>
+</body>
+</html>

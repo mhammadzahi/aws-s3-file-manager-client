@@ -10,10 +10,15 @@ const moveUrl = domain + '/move-file';
 const createFolderUrl = domain + '/create-folder';
 const getSignedUrlUrl = domain + '/get-signed-url';
 
+//--------------------------------------
+const path = require('path');
+//-------------------------------------------
+
+
 
 const fs = require('fs');
 async function convertToBase64(){
-    const buffer = fs.readFileSync('5907.jpg');
+    const buffer = fs.readFileSync('ai.pdf');
     const base64String_ = buffer.toString('base64');
     return base64String_;
 }
@@ -141,13 +146,59 @@ async function postProtectedData(uploadDataUrl, token, postData){
 }
 
 
+
+//-------------------------------------------------------------------------------
+const http = require('http'); // Use http instead of https
+
+
+async function uploadPdf(pdfPath) {
+    const pdfBlob = fs.readFileSync(pdfPath);
+
+    const options = {
+        hostname: '127.0.0.1',
+        port: 5000,
+        path: '/dont-allow-copy-pdf',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/pdf',
+            'Authorization': `Bearer ${tokenG}`,
+            'Content-Length': pdfBlob.length,
+        },
+    };
+
+    const req = http.request(options, (res) => {
+        let data = [];
+
+        res.on('data', (chunk) => {
+            data.push(chunk);
+        });
+
+        res.on('end', () => {
+            const resultBuffer = Buffer.concat(data);
+            fs.writeFileSync('processed.pdf', resultBuffer);
+            console.log('Processed PDF saved as processed.pdf');
+        });
+    });
+
+    req.on('error', (error) => {
+        console.error('Error uploading PDF:', error);
+    });
+
+    req.write(pdfBlob);
+    req.end();
+}
+//------------------------------------------------------------------------------
+
 async function main(){
     await login('accounting_user', 'qd5wlsm@aqno13v6o');
-    var base64str = await convertToBase64();
+    //console.log(tokenG);
+    //var base64str = await convertToBase64();
 
-    //await uploadFile(base64str, 101, 151116, 'reem_island', 'main-or-any-7', 'folder-1302', 'zahi-mohamed', 'image', true);
-    await getSignedUrl('https://zahi-mohamed.s3.ap-south-1.amazonaws.com/folder-1302/735118458_403101098_reem_island_main-or-any-7.jpeg');
+    //await uploadFile(base64str, 101, 151116, 'reem_issland', 'main-or-any-777', 'f', 'hr-folder-contracts', 'pdf', false);
+    //await getSignedUrl('https://zahi-mohamed.s3.ap-south-1.amazonaws.com/folder-1302/735118458_403101098_reem_island_main-or-any-7.jpeg');
+    //const pdfPath = path.join(__dirname, 'ai.pdf'); // Replace with your PDF file path
+    //await uploadPdf(pdfPath);
+
 }
 
 main();
-
