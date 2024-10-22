@@ -17,8 +17,8 @@ const path = require('path');
 
 
 const fs = require('fs');
-async function convertToBase64(){
-    const buffer = fs.readFileSync('ai.pdf');
+async function convertToBase64(filePath){
+    const buffer = fs.readFileSync(filePath);
     const base64String_ = buffer.toString('base64');
     return base64String_;
 }
@@ -64,7 +64,7 @@ async function uploadFile(base64str, unitNumber, snNumber, location, mainOrAny, 
             main_or_any: mainOrAny,
             folder_name: folderName,// folder name can be ''
             bucket_name: bucketName,
-            file_type: fileType, //'pdf'/'image'/'audio'
+            file_type: fileType, //'pdf'/'image'/'audio'/'video'
             is_private: isPrivate //true/false
         };
 
@@ -192,10 +192,10 @@ async function uploadPdf(pdfPath) {
 async function main(){
     await login('accounting_user', 'qd5wlsm@aqno13v6o');
     //console.log(tokenG);
-    //var base64str = await convertToBase64();
+    var base64str = await convertToBase64('spkr.jpeg');
 
-    //await uploadFile(base64str, 101, 151116, 'reem_issland', 'main-or-any-777', 'f', 'hr-folder-contracts', 'pdf', false);
-    //await getSignedUrl('https://zahi-mohamed.s3.ap-south-1.amazonaws.com/folder-1302/735118458_403101098_reem_island_main-or-any-7.jpeg');
+    await uploadFile(base64str, 1903, 151016, 'miramar-general', 'main', 'pic', 'miramar-real-estate', 'image', false);
+    //await getSignedUrl('https://building-board.s3.ap-south-1.amazonaws.com/735118458_403101098_reem_issland3_main-or-any-787.mp4');
     //const pdfPath = path.join(__dirname, 'ai.pdf'); // Replace with your PDF file path
     //await uploadPdf(pdfPath);
 
