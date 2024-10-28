@@ -1,5 +1,5 @@
-//domain = 'https://www.jungleclock.com'
-domain = 'http://127.0.0.1:5000';
+domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com'
+//domain = 'http://127.0.0.1:5000';
 
 var tokenG = null;
 
@@ -145,60 +145,45 @@ async function postProtectedData(uploadDataUrl, token, postData){
     }
 }
 
+const { Blob } = require('buffer'); // Use Blob for handling binary data
+async function convertPdf(pdfFile) {
+    try {
+        // Read the PDF file as binary
+        const pdfData = fs.readFileSync(pdfFile);
 
-
-//-------------------------------------------------------------------------------
-const http = require('http'); // Use http instead of https
-
-
-async function uploadPdf(pdfPath) {
-    const pdfBlob = fs.readFileSync(pdfPath);
-
-    const options = {
-        hostname: '127.0.0.1',
-        port: 5000,
-        path: '/dont-allow-copy-pdf',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/pdf',
-            'Authorization': `Bearer ${tokenG}`,
-            'Content-Length': pdfBlob.length,
-        },
-    };
-
-    const req = http.request(options, (res) => {
-        let data = [];
-
-        res.on('data', (chunk) => {
-            data.push(chunk);
+        // Create a Blob from the PDF data
+        const pdfBlob = new Blob([pdfData], { type: 'application/pdf' });
+        const response = await fetch(domain + '/dont-allow-copy-pdf', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${tokenG}`,
+                'Content-Type': 'application/pdf'
+            },
+            body: pdfBlob
         });
 
-        res.on('end', () => {
-            const resultBuffer = Buffer.concat(data);
-            fs.writeFileSync('processed.pdf', resultBuffer);
-            console.log('Processed PDF saved as processed.pdf');
-        });
-    });
+        if(!response.ok) throw new Error(`Error: ${response.statusText}`);
 
-    req.on('error', (error) => {
-        console.error('Error uploading PDF:', error);
-    });
-
-    req.write(pdfBlob);
-    req.end();
+        // save
+        fs.writeFileSync('processed_' + pdfFile, Buffer.from(await response.arrayBuffer()));
+        console.log(`ok`);
+    } catch (error) {
+        console.error('Error processing PDF:', error.message);
+    }
 }
-//------------------------------------------------------------------------------
 
+
+//------------------------------------------------------------------------------
 async function main(){
     await login('accounting_user', 'qd5wlsm@aqno13v6o');
     //console.log(tokenG);
-    var base64str = await convertToBase64('spkr.jpeg');
 
-    await uploadFile(base64str, 1903, 151016, 'miramar-general', 'main', 'pic', 'miramar-real-estate', 'image', false);
-    //await getSignedUrl('https://building-board.s3.ap-south-1.amazonaws.com/735118458_403101098_reem_issland3_main-or-any-787.mp4');
-    //const pdfPath = path.join(__dirname, 'ai.pdf'); // Replace with your PDF file path
-    //await uploadPdf(pdfPath);
+    //var base64str = await convertToBase64('5ff34ca.jpg');
+    //await uploadFile(base64str, 1903, 151016, 'miramar-general', 'main', 'pic', 'hr-folder-contracts', 'image', true);
 
+    //await getSignedUrl('https://hr-folder-contracts.s3.ap-south-1.amazonaws.com/pic/387163052_853518228_505482314_miramar-general_main.jpeg');
+
+    await convertPdf('ai.pdf')
 }
 
 main();
