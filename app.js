@@ -1,5 +1,8 @@
-domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com'
+//domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com'
 //domain = 'http://127.0.0.1:5000';
+//domain = 'http://83.110.74.122:5001'
+//domain = 'http://10.39.1.67:5001'
+
 
 var tokenG = null;
 
@@ -173,7 +176,7 @@ async function convertPdf(pdfFile) {
 }
 
 
-//------------------------------------------------------------------------------
+
 async function main(){
     await login('accounting_user', 'qd5wlsm@aqno13v6o');
     //console.log(tokenG);
@@ -181,9 +184,9 @@ async function main(){
     //var base64str = await convertToBase64('5ff34ca.jpg');
     //await uploadFile(base64str, 1903, 151016, 'miramar-general', 'main', 'pic', 'hr-folder-contracts', 'image', true);
 
-    //await getSignedUrl('https://hr-folder-contracts.s3.ap-south-1.amazonaws.com/pic/387163052_853518228_505482314_miramar-general_main.jpeg');
+    //await getSignedUrl('');
 
-    await convertPdf('ai.pdf')
+    await convertPdf('go.pdf')
 }
 
 main();
