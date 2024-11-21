@@ -1,62 +1,37 @@
 
 //domain = 'http://127.0.0.1:5000';
-//domain = 'http://83.110.74.122:5001'
-domain = 'https://propertymart.site'
-//domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com'
+//domain = 'http://83.110.74.122:5001'; // miramar-server
+domain = 'https://propertymart.site';
+//domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com';
 
-var tokenG = null;
 
-const loginUrl = domain + '/login';
 const uploadFileUrl = domain + '/upload-file';
 const deleteUrl = domain + '/delete-file';
-const moveUrl = domain + '/move-file';
-const createFolderUrl = domain + '/create-folder';
-const getSignedUrlUrl = domain + '/get-signed-url';
+// const moveUrl = domain + '/move-file';
+// const createFolderUrl = domain + '/create-folder';
+// const getSignedUrlUrl = domain + '/get-signed-url';
 
-//--------------------------------------
-const path = require('path');
-//-------------------------------------------
+const apiKey = "gpoB54Jew95kYLTm6DWZXdXyhI6";
+// const apiKey = "4lUMBEvBEs7x1Oe7QOEw7xeB350";
+// const apiKey = "HKLQB6iM5EWI62bTgjTzHvs2F2q";
 
 
 
+//const path = require('path');
 const fs = require('fs');
-async function convertToBase64(filePath){
+
+async function convertToBase64(filePath) {
     const buffer = fs.readFileSync(filePath);
     const base64String_ = buffer.toString('base64');
     return base64String_;
 }
 
 
-async function login(userName, passWord){
-    const credentials = {
-        username: userName,
-        password: passWord
-    };
-    try{
-        const response = await fetch(loginUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(credentials),
-        });
-        if(response.ok){
-            const data = await response.json();
-            tokenG = data.res;
-            //console.log(tokenG);
-        }
-        else{
-            console.log('Authentication failed:', response.status);
-        }
-    }
-    catch(error){
-        console.log('Error during authentication:', error);
-    }
-}
 
+async function uploadFile(base64str, unitNumber, snNumber, location, mainOrAny, folderName, bucketName, fileType, isPrivate) {
+    const token = apiKey;
 
-async function uploadFile(base64str, unitNumber, snNumber, location, mainOrAny, folderName, bucketName, fileType, isPrivate){
-    const token = tokenG;if(token){
+    if (token) {
         const postData = {
             base64str: base64str,
             unit_number: unitNumber,
@@ -73,22 +48,12 @@ async function uploadFile(base64str, unitNumber, snNumber, location, mainOrAny, 
     }
 }
 
-    async function getSignedUrl(objectKey){
-    const token = tokenG;
-    if(token){
-
-        postData = {
-            object_key: objectKey 
-        };
-        postProtectedData(getSignedUrlUrl, token, postData);
-    }
-}
 
 
 
-async function deleteFile(fileUrl){
-    const token = tokenG;
-    if(token){
+async function deleteFile(fileUrl) {
+    const token = apiKey;
+    if (token) {
         const postData = {
             file_url: fileUrl
         };
@@ -97,88 +62,101 @@ async function deleteFile(fileUrl){
 }
 
 
-async function MoveFile(fileUrl, destinationBucket){
-    const token = tokenG;
-    if(token){
-        const postData = {
-            file_url: fileUrl,
-            destination_bucket: destinationBucket
-        };
-        postProtectedData(moveUrl, token, postData);
-    }
-}
 
-async function createFolder(bucketName, folderName){
-    const token = tokenG;
-    if(token){
-        const postData = {
-            bucket_name: bucketName,
-            folder_name: folderName//'hello/how/are/you'
-        };
-        postProtectedData(createFolderUrl, token, postData);
-    }
-}
+// async function getSignedUrl(objectKey) {
+//     const token = apiKey;
+//     if (token) {
+
+//         postData = {
+//             object_key: objectKey
+//         };
+//         postProtectedData(getSignedUrlUrl, token, postData);
+//     }
+// }
 
 
-async function postProtectedData(uploadDataUrl, token, postData){
+
+// async function MoveFile(fileUrl, destinationBucket){
+//     const token = apiKey;
+//     if(token){
+//         const postData = {
+//             file_url: fileUrl,
+//             destination_bucket: destinationBucket
+//         };
+//         postProtectedData(moveUrl, token, postData);
+//     }
+// }
+
+// async function createFolder(bucketName, folderName){
+//     const token = apiKey;
+//     if(token){
+//         const postData = {
+//             bucket_name: bucketName,
+//             folder_name: folderName//'hello/how/are/you'
+//         };
+//         postProtectedData(createFolderUrl, token, postData);
+//     }
+// }
+
+
+async function postProtectedData(uploadDataUrl, token, postData) {
     try {
         const params = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
+                'Authorization': token,
             },
             body: JSON.stringify(postData),
         }
         //console.log(params);
         const response = await fetch(uploadDataUrl, params);
 
-        if(response.ok){
+        if (response.ok) {
             const result = await response.json();
             console.log(result.res);
         }
-        else{
+        else {
             const errorResult = await response.json(); // Parse the response body
             console.log(errorResult.error); // Log the error message
         }
     }
-    catch(error){
+    catch (error) {
         console.log(error);
     }
 }
 
-const { Blob } = require('buffer'); // Use Blob for handling binary data
-async function convertPdf(pdfFile) {
-    try {
-        // Read the PDF file as binary
-        const pdfData = fs.readFileSync(pdfFile);
 
-        // Create a Blob from the PDF data
-        const pdfBlob = new Blob([pdfData], { type: 'application/pdf' });
-        const response = await fetch(domain + '/dont-allow-copy-pdf', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${tokenG}`,
-                'Content-Type': 'application/pdf'
-            },
-            body: pdfBlob
-        });
+// const { Blob } = require('buffer'); // Use Blob for handling binary data
+// async function convertPdf(pdfFile) {
+//     try {
+//         // Read the PDF file as binary
+//         const pdfData = fs.readFileSync(pdfFile);
 
-        if(!response.ok) throw new Error(`Error: ${response.statusText}`);
+//         // Create a Blob from the PDF data
+//         const pdfBlob = new Blob([pdfData], { type: 'application/pdf' });
+//         const response = await fetch(domain + '/dont-allow-copy-pdf', {
+//             method: 'POST',
+//             headers: {
+//                 'Authorization': apiKey,
+//                 'Content-Type': 'application/pdf'
+//             },
+//             body: pdfBlob
+//         });
 
-        // save
-        fs.writeFileSync('processed_' + pdfFile, Buffer.from(await response.arrayBuffer()));
-        console.log(`ok`);
-    } catch (error) {
-        console.error('Error processing PDF:', error.message);
-    }
-}
+//         if(!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+//         // save
+//         fs.writeFileSync('processed_' + pdfFile, Buffer.from(await response.arrayBuffer()));
+//         console.log(`ok`);
+//     } catch (error) {
+//         console.error('Error processing PDF:', error.message);
+//     }
+// }
 
 
 
-async function main(){
-    await login('accounting_user', 'qd5wlsm@aqno13v6o');
-    console.log(tokenG);
+async function main() {
 
     var base64str = await convertToBase64('5ff34ca.jpg');
     await uploadFile(base64str, 1903, 151026, 'miramar-general', 'any', 'pic', 'rmboard', 'image', false);
