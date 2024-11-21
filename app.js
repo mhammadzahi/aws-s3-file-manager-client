@@ -1,8 +1,8 @@
-//domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com'
+
 //domain = 'http://127.0.0.1:5000';
 //domain = 'http://83.110.74.122:5001'
-//domain = 'http://10.39.1.67:5001'
-
+domain = 'https://propertymart.site'
+//domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com'
 
 var tokenG = null;
 
@@ -56,9 +56,7 @@ async function login(userName, passWord){
 
 
 async function uploadFile(base64str, unitNumber, snNumber, location, mainOrAny, folderName, bucketName, fileType, isPrivate){
-    const token = tokenG;
-
-    if(token){
+    const token = tokenG;if(token){
         const postData = {
             base64str: base64str,
             unit_number: unitNumber,
@@ -75,8 +73,7 @@ async function uploadFile(base64str, unitNumber, snNumber, location, mainOrAny, 
     }
 }
 
-
-async function getSignedUrl(objectKey){
+    async function getSignedUrl(objectKey){
     const token = tokenG;
     if(token){
 
@@ -125,14 +122,16 @@ async function createFolder(bucketName, folderName){
 
 async function postProtectedData(uploadDataUrl, token, postData){
     try {
-        const response = await fetch(uploadDataUrl, {
+        const params = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(postData),
-        });
+        }
+        //console.log(params);
+        const response = await fetch(uploadDataUrl, params);
 
         if(response.ok){
             const result = await response.json();
@@ -179,14 +178,14 @@ async function convertPdf(pdfFile) {
 
 async function main(){
     await login('accounting_user', 'qd5wlsm@aqno13v6o');
-    //console.log(tokenG);
+    console.log(tokenG);
 
-    //var base64str = await convertToBase64('5ff34ca.jpg');
-    //await uploadFile(base64str, 1903, 151016, 'miramar-general', 'main', 'pic', 'hr-folder-contracts', 'image', true);
+    var base64str = await convertToBase64('5ff34ca.jpg');
+    await uploadFile(base64str, 1903, 151026, 'miramar-general', 'any', 'pic', 'rmboard', 'image', false);
 
     //await getSignedUrl('');
 
-    await convertPdf('go.pdf')
+    //await convertPdf('go.pdf')
 }
 
 main();
