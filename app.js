@@ -159,10 +159,10 @@ async function postProtectedData(uploadDataUrl, token, postData) {
 async function main() {
 
     var base64str = await convertToBase64('5ff34ca.jpg');
-    await uploadFile(base64str, 1903, 151026, 'miramar-general', 'any', 'pic', 'rmboard', 'image', false);
+    //await uploadFile(base64str, 1903, 151026, 'reem-island-abu-dhabi', 'any', 'pics-public', 'rmboard', 'image', false);
 
+    await deleteFile('https://rmboard.s3.ap-south-1.amazonaws.com/pics-public/302031153_853518228_251103867_reem-island-abu-dhabi_any.jpeg')
     //await getSignedUrl('');
-
     //await convertPdf('go.pdf')
 }
 
