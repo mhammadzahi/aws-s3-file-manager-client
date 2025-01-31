@@ -1,11 +1,8 @@
-//domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com';
-//domain = 'http://127.0.0.1:5000';
-//domain = 'http://83.110.74.122:5001';
-//domain = 'http://10.39.1.67:5001';
-const domain = 'https://propertymart.site';
+//const domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com';
+//const domain = 'http://127.0.0.1:5000';
 
-
-var tokenG = null;
+//const domain = 'http://5.230.249.73:5003';
+const domain = 'https://miramaruae.co';
 
 const loginUrl = domain + '/login';
 const uploadFileUrl = domain + '/upload-file';
@@ -14,9 +11,6 @@ const moveUrl = domain + '/move-file';
 const createFolderUrl = domain + '/create-folder';
 const getSignedUrlUrl = domain + '/get-signed-url';
 
-//--------------------------------------
-//const path = require('path');
-//-------------------------------------------
 
 
 
@@ -28,6 +22,7 @@ async function convertToBase64(filePath){
 }
 
 
+var tokenG = null;
 async function login(userName, passWord){
     const credentials = {
         username: userName,
@@ -180,12 +175,12 @@ async function convertPdf(pdfFile) {
 
 async function main(){
     await login('accounting_user', 'qd5wlsm@aqno13v6o');
-    //console.log(tokenG);
+    console.log(tokenG);
 
     var base64str = await convertToBase64('5ff34ca.jpg');
-    await uploadFile(base64str, 1903, 151016, 'miramar-general-maint', 'main', 'pics-pics', 'hr-folder-contracts', 'image', true);
+    //await uploadFile(base64str, 1903, 181016, 'miram8ar-7-maint', 'main', 'pic-71-5', 'hr-folder-contracts', 'image', true);
 
-    //await getSignedUrl('');
+    await getSignedUrl('https://hr-folder-contracts.s3.ap-south-1.amazonaws.com/807/171795142_931691496_411184903_&MOHAMMAD-ABDAL-MONEM-MOHAMAD-SHATNAWI&_$cancellation of visa$Employment Visa Cancellation Letter (3) (1).pdf$27-12-2024$-NpAyyV.pdf');
 
     //await convertPdf('go.pdf')
 }
