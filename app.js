@@ -1,6 +1,5 @@
-//const domain = 'https://amazon-s3-images-e9b9e7a23b73.herokuapp.com';
-//const domain = 'http://127.0.0.1:5000';
 
+//const domain = 'http://127.0.0.1:5003';
 //const domain = 'http://5.230.249.73:5003';
 const domain = 'https://miramaruae.co';
 
@@ -174,15 +173,15 @@ async function convertPdf(pdfFile) {
 
 
 async function main(){
-    await login('accounting_user', 'qd5wlsm@aqno13v6o');
+    await login('accounting_user', 'qd5wlsm@aqnu13v6o');
     console.log(tokenG);
 
-    var base64str = await convertToBase64('5ff34ca.jpg');
-    //await uploadFile(base64str, 1903, 181016, 'miram8ar-7-maint', 'main', 'pic-71-5', 'hr-folder-contracts', 'image', true);
+    //var base64str = await convertToBase64('5ff34ca.jpg');
+    //await uploadFile(base64str, 1903, 181016, '98ar-7-maint', 'main', 'pic-785-5', 'hr-folder-contracts', 'image', true);
 
-    await getSignedUrl('https://hr-folder-contracts.s3.ap-south-1.amazonaws.com/807/171795142_931691496_411184903_&MOHAMMAD-ABDAL-MONEM-MOHAMAD-SHATNAWI&_$cancellation of visa$Employment Visa Cancellation Letter (3) (1).pdf$27-12-2024$-NpAyyV.pdf');
+    //await getSignedUrl('https://hr-folder-contracts.s3.ap-south-1.amazonaws.com/pic-785-5/165172996_853518228_904229492_98ar-7-maint_main.jpeg');
 
-    //await convertPdf('go.pdf')
+    await convertPdf('ai.pdf')
 }
 
 main();
